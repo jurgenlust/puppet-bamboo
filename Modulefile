@@ -1,0 +1,10 @@
+name 'jlust-bamboo'
+version ''
+
+author 'jlust'
+license ''
+project_page ''
+source ''
+summary ''
+description ''
+dependency 'jlust/puppet-tomcat', '=='

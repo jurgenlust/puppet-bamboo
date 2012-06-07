@@ -1,0 +1,20 @@
+{
+  "name": "jlust-bamboo",
+  "author": "jlust",
+  "description": "",
+  "license": "",
+  "project_page": "",
+  "source": "",
+  "summary": "",
+  "version": "",
+  "checksums": {
+    "Modulefile": "845115c8545e1db6e6b25e6788602134",
+    "README": "f5895c5b378e3277bf79098e08901d00",
+    "README.md": "616ecad52fcb277ab04cbd111aa22f5a",
+    "manifests/init.pp": "c7a8f0adbc1c986f1571d1a1945587b5",
+    "spec/spec.opts": "a600ded995d948e393fbe2320ba8e51c",
+    "spec/spec_helper.rb": "ca19ec4f451ebc7fdb035b52eae6e909",
+    "tests/init.pp": "9011d02b9c9d92f2f1d2d9c2e8c87e25"
+  },
+  "dependencies": []
+}
