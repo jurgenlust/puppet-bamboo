@@ -28,7 +28,8 @@ class bamboo (
 	$number = 5,
 	$version = "4.1",
 	$contextroot = "bamboo",
-	$webapp_base = "/srv"
+	$webapp_base = "/srv",
+	$service_require = ''
 ){
 # configuration	
 	$war = "atlassian-bamboo-${version}.war"
@@ -48,6 +49,12 @@ class bamboo (
     	default => "${contextroot}.war"	
     }
     
+    $bamboo_service_require = $service_require ? {
+    	'' => [File['bamboo-war'], File['bamboo-db-driver'], File[$bamboo_home]],
+    	default => [File['bamboo-war'], File['bamboo-db-driver'], File[$bamboo_home], $service_require]
+    }
+    
+# create bamboo-home    
 	file { $bamboo_home:
 		ensure => directory,
 		mode => 0755,
@@ -56,6 +63,7 @@ class bamboo (
 		require => Tomcat::Webapp::User[$user],
 	}
 
+# download the war file
 	exec { "download-bamboo":
 		command => "/usr/bin/wget -O ${bamboo_dir}/tomcat/webapps/${webapp_war} ${download_url}",
 		require => Tomcat::Webapp::Tomcat[$user],
@@ -82,6 +90,7 @@ class bamboo (
 		require => Exec["download-bamboo"],
 	}
 
+# manage the Tomcat instance
 	tomcat::webapp { $user:
 		username => $user,
 		webapp_base => $webapp_base,
@@ -89,9 +98,7 @@ class bamboo (
 		java_opts => "-server -Xms128m -Xmx512m -XX:MaxPermSize=256m -Djava.awt.headless=true -Dbamboo.home=${bamboo_home}",
 		server_host_config => template("bamboo/context.erb"),
 		description => "Atlassian Bamboo",
-		service_require => [File['bamboo-war'], File['bamboo-db-driver'], File[$bamboo_home]],
+		service_require => $bamboo_service_require,
 		require => Class["tomcat"],
 	}
-
-		
 }
