@@ -68,11 +68,11 @@ class bamboo (
 		require => Tomcat::Webapp::Tomcat[$user],
 		creates => "/tmp/${war}",
 		timeout => 1200,
-		notify => Exec["move-bamboo"], 	
+		notify => Exec["refresh-bamboo"], 	
 	}
 	
-	exec { "move-bamboo":
-		command => "/bin/mv /tmp/${war} ${bamboo_dir}/tomcat/webapps/${webapp_war}",
+	exec { "refresh-bamboo":
+		command => "/bin/rm -rf ${bamboo_dir}/tomcat/webapps/* && /bin/cp /tmp/${war} ${bamboo_dir}/tomcat/webapps/${webapp_war}",
 		require => Exec["download-bamboo"],
 		refreshonly => true,
 		notify => Tomcat::Webapp::Service[$user],
@@ -94,7 +94,7 @@ class bamboo (
 		ensure => file,
 		owner => $user,
 		group => $user,
-		require => Exec["move-bamboo"],
+		require => Exec["refresh-bamboo"],
 	}
 
 # manage the Tomcat instance
