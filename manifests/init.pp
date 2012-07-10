@@ -26,7 +26,7 @@ class bamboo (
 	$database_user = "bamboo",
 	$database_pass = "bamboo",
 	$number = 5,
-	$version = "4.1",
+	$version = "4.1.2",
 	$contextroot = "bamboo",
 	$webapp_base = "/srv"
 ){
