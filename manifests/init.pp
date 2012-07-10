@@ -26,7 +26,7 @@ class bamboo (
 	$database_user = "bamboo",
 	$database_pass = "bamboo",
 	$number = 5,
-	$version = "4.1",
+	$version = "4.1.2",
 	$contextroot = "bamboo",
 	$webapp_base = "/srv",
 	$service_require = ''
@@ -63,12 +63,19 @@ class bamboo (
 		require => Tomcat::Webapp::User[$user],
 	}
 
-# download the war file
-	exec { "download-bamboo":
-		command => "/usr/bin/wget -O ${bamboo_dir}/tomcat/webapps/${webapp_war} ${download_url}",
+	exec { "download-bamboo" :
+		command => "/usr/bin/wget -O /tmp/${war} ${download_url}",
 		require => Tomcat::Webapp::Tomcat[$user],
-		creates => "${bamboo_dir}/tomcat/webapps/${webapp_war}",
-		timeout => 1200,	
+		creates => "/tmp/${war}",
+		timeout => 1200,
+		notify => Exec["move-bamboo"], 	
+	}
+	
+	exec { "move-bamboo":
+		command => "/bin/mv /tmp/${war} ${bamboo_dir}/tomcat/webapps/${webapp_war}",
+		require => Exec["download-bamboo"],
+		refreshonly => true,
+		notify => Tomcat::Webapp::Service[$user],
 	}
 	
 # the database driver jar
@@ -87,7 +94,7 @@ class bamboo (
 		ensure => file,
 		owner => $user,
 		group => $user,
-		require => Exec["download-bamboo"],
+		require => Exec["move-bamboo"],
 	}
 
 # manage the Tomcat instance
