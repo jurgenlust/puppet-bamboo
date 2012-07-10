@@ -26,3 +26,24 @@ class { "bamboo":
 	webapp_base => "/opt", # Bamboo will be installed in /opt/bamboo
 	require => Postgres::Db['bamboodb'],
 }
+
+bamboo::capability::ant { "1.8.4":
+}
+
+bamboo::capability::maven { "2.2.1":
+}
+
+bamboo::capability::maven { "3.0.4":
+}
+
+bamboo::capability::gradle { "1.0":
+}
+
+bamboo::capability::grails { "1.3.7":
+}
+
+bamboo::capability::grails { "2.0.4":
+}
+
+bamboo::capability::grails { "2.1.0":
+}
